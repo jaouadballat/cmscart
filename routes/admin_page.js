@@ -32,7 +32,7 @@ router.post('/add-page', function(req, res) {
   }else {
     const title =req.body.title;
     const content =req.body.content;
-    const slug = slugify(req.body.slug);
+    const slug = slugify(req.body.title);
     Page.findOne({slug: slug}, function(err, page){
       if(page) {
         const errors = [];

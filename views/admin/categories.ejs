@@ -1,0 +1,27 @@
+<%- include('../_layouts/admin_header'); %>
+<h1>All categories</h1>
+<a class="btn btn-primary my-2" href="/admin/categories/add-category">Add a new category</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Edit</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% categories.map((category) => { %>
+            <tr>
+                <td><%= category.title %></td>
+                <td><a href="/admin/categories/edit-category/<%= category.slug %>">Edit</a></td>
+                <td>
+                    <form method="post" action="/admin/categories/delete-category" >
+                        <input type="hidden" name="id" value="<%= category._id %>" />
+                        <button class="btn btn-danger"  type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+<%- include('../_layouts/admin_footer'); %>
