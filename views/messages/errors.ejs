@@ -1,0 +1,7 @@
+<% if(errors) { %>
+  <div class="alert alert-danger">
+  <% errors.map(error => { %>
+    <p><%= error.msg %></p>
+  <% }); %>
+  </div>
+<% } %>

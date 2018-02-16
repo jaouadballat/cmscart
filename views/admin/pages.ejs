@@ -1,0 +1,28 @@
+<%- include('../_layouts/admin_header'); %>
+<h1>All pages</h1>
+    <table class="table stripped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Edit</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% pages.map((page) => { %>
+            <tr>
+                <td><%= page.title %></td>
+                <td><a href="/admin/pages/edit-page/<%= page.slug %>">Edit</a></td>
+                <% if(page.title != "Home" ) { %>
+                <td>
+                    <form method="post" action="/admin/pages/delete-page" >
+                        <input type="hidden" name="id" value="<%= page._id %>" />
+                        <button class="btn btn-danger"  type="submit">Delete</button>
+                    </form>
+                </td>
+                <% } %>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+<%- include('../_layouts/admin_footer'); %>
