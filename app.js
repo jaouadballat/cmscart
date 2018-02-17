@@ -25,6 +25,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 const index = require('./routes/index');
 const admin_page = require('./routes/admin_page');
 const admin_category = require('./routes/admin_category');
+const admin_product = require('./routes/admin_product');
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.locals.success = null;
 app.use('/', index);
 app.use('/admin/pages', admin_page);
 app.use('/admin/categories', admin_category);
+app.use('/admin/products', admin_product);
 
 
 // catch 404 and forward to error handler

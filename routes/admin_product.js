@@ -1,11 +1,43 @@
 const express = require('express');
 const slugify = require('slugify');
 const Category = require('../models/categories');
-
+const Product = require('../models/products');
+const path = require('path');
+const multer = require('multer');
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '/Tutorials/Ecommerce/public/images')
+    },
+    filename: function (req, file, cb) {
+        
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+});
+const fileFilter = function (req, file, cb) {
+
+    const filetypes = /jpeg|jpg/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+        console.log(file);
+        return cb(null, true);
+    }
+
+    cb("Error: File upload only supports the following filetypes - " + filetypes);
+
+    
+}
+
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single('image');
+
+
 
 /* GET categories listing. */
 router.get('/', function (req, res, next) {
+    
     Category.find({}, function (err, categories) {
         if (err) return console.log(err);
         res.render('admin/categories', {
@@ -15,8 +47,40 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/add-category', function (req, res) {
-    res.render('admin/add-category', { title: "add category" });
+router.post('/add-product', function (req, res) {
+    upload(req, res, function (err) {
+        const errors = [];
+        if (err) {
+            // An error occurred when uploading
+            errors.push({
+                msg: err
+            });
+            Category.find(function(err, categories){
+                res.render('admin/add-product', {
+                    title: "add product",
+                    errors: errors,
+                    categories: categories
+                });
+            //return console.log(err)
+            });
+
+        }else {
+            res.redirect('/admin/products/add-product');
+            // Everything went fine
+
+        }
+    });
+});
+
+router.get('/add-product', function (req, res) {
+    Category.find(function(err, categories) {
+        if(err) return console.log(err);
+        res.render('admin/add-product',
+         { 
+             title: "add category",
+            categories: categories
+         });
+    });
 });
 
 router.post('/add-category', function (req, res) {
