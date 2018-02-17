@@ -22,7 +22,6 @@ const fileFilter = function (req, file, cb) {
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
     if (mimetype && extname) {
-        console.log(file);
         return cb(null, true);
     }
 
@@ -48,28 +47,50 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/add-product', function (req, res) {
-    upload(req, res, function (err) {
-        const errors = [];
-        if (err) {
-            // An error occurred when uploading
-            errors.push({
-                msg: err
+    req.checkBody('title', 'Title is required').notEmpty();
+    req.checkBody('price', 'Price is required').notEmpty();
+    req.checkBody('description', 'Content is required').notEmpty();
+    let errors = req.validationErrors();
+    if(errors) {
+        Category.find(function (err, categories) {
+            res.render('admin/add-product', {
+                title: "add product",
+                errors: errors,
+                categories: categories
             });
-            Category.find(function(err, categories){
-                res.render('admin/add-product', {
-                    title: "add product",
-                    errors: errors,
-                    categories: categories
+        });
+    }else {
+        upload(req, res, function (err) {
+            errors= [];
+            if (err) {
+                // An error occurred when uploading
+                errors.push({
+                    msg: err
                 });
-            //return console.log(err)
-            });
+                Category.find(function (err, categories) {
+                    res.render('admin/add-product', {
+                        title: "add product",
+                        errors: errors,
+                        categories: categories
+                    });
+                });
 
-        }else {
-            res.redirect('/admin/products/add-product');
-            // Everything went fine
+            } else {
+                // let product = new Product({
+                //     title: req.body.title,
+                //     category: req.body.category,
+                //     price: req.body.price,
+                //     description: req.body.description,
+                //     image: req.file.filename
+                // });
+                res.send(req.body)
+                //res.redirect('/admin/products/add-product');
+                // Everything went fine
 
-        }
-    });
+            }
+        });
+    }
+    
 });
 
 router.get('/add-product', function (req, res) {
