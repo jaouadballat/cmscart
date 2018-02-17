@@ -1,7 +1,7 @@
 <%- include('../_layouts/admin_header'); %>
     <a href="/admin/products" class="btn btn-primary my-3">Back to all products</a>
     <h1>Add page</h1>
-    <form action="/admin/products/add-product" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="/admin/products/add-product" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label>Title: </label>
             <input type="text" name="title" placeholder="Title" class="form-control" />

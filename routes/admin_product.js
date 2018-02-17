@@ -47,23 +47,23 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/add-product', function (req, res) {
-    req.checkBody('title', 'Title is required').notEmpty();
-    req.checkBody('price', 'Price is required').notEmpty();
-    req.checkBody('description', 'Content is required').notEmpty();
-    let errors = req.validationErrors();
-    if(errors) {
-        Category.find(function (err, categories) {
-            res.render('admin/add-product', {
-                title: "add product",
-                errors: errors,
-                categories: categories
-            });
-        });
-    }else {
+    // req.checkBody('title', 'Title is required').notEmpty();
+    // req.checkBody('price', 'Price is required').notEmpty();
+    // req.checkBody('description', 'Content is required').notEmpty();
+    // let errors = req.validationErrors();
+    // if(errors) {
+    //     Category.find(function (err, categories) {
+    //         res.render('admin/add-product', {
+    //             title: "add product",
+    //             errors: errors,
+    //             categories: categories
+    //         });
+    //     });
+    
         upload(req, res, function (err) {
-            errors= [];
+           
+           let errors= [];
             if (err) {
-                // An error occurred when uploading
                 errors.push({
                     msg: err
                 });
@@ -76,20 +76,34 @@ router.post('/add-product', function (req, res) {
                 });
 
             } else {
-                // let product = new Product({
-                //     title: req.body.title,
-                //     category: req.body.category,
-                //     price: req.body.price,
-                //     description: req.body.description,
-                //     image: req.file.filename
-                // });
-                res.send(req.body)
-                //res.redirect('/admin/products/add-product');
-                // Everything went fine
-
+                req.checkBody('title', 'Title is required').notEmpty();
+                 req.checkBody('price', 'Price is required').notEmpty();
+                req.checkBody('description', 'Content is required').notEmpty();
+                errors = req.validationErrors();
+                if(errors) {
+                    Category.find(function (err, categories) {
+                        res.render('admin/add-product', {
+                            title: "add product",
+                            errors: errors,
+                            categories: categories
+                        });
+                    });
+                }else {
+                    let product = new Product({
+                        title: req.body.title,
+                        category: req.body.category,
+                        price: req.body.price,
+                        description: req.body.description,
+                        image: req.file.path
+                    });
+                    product.save(function(err) {
+                        if (err) return console.log(err);
+                        res.redirect('/admin/products/add-product');
+                    });
+                }
             }
         });
-    }
+    
     
 });
 
