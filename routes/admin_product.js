@@ -109,55 +109,19 @@ router.get('/add-product', function (req, res) {
     });
 });
 
-router.post('/add-category', function (req, res) {
-    req.checkBody('title', 'Title is required').notEmpty();
-    const errors = req.validationErrors();
-    if (errors) {
-        res.render('admin/add-page', {
-            errors: errors,
-            title: "add category"
-        });
-
-    } else {
-        const title = req.body.title;
-        const slug = slugify(req.body.title);
-        Category.findOne({ slug: slug }, function (err, category) {
-            if (category) {
-                const errors = [];
-                errors.push({
-                    msg: "This title is already taken please choose one"
-                });
-                res.render('admin/add-category', {
-                    title: "add category",
-                    errors: errors
-                });
-            } else {
-                const category = new Category({
-                    title: title,
-                    slug: slug,
-                });
-                category.save(function (err) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        res.redirect('/admin/categories');
-                    }
-                });
-            }
-        });
-    }
-});
-
-router.get('/edit-category/:slug', function (req, res) {
-    Category.findOne({ slug: req.params.slug }, function (err, category) {
+router.get('/edit-product/:id', function (req, res) {
+    Product.findOne({ _id: req.params.id }, function (err, product) {
         if (err) {
             console.log(err)
         }
         else {
-            res.render('admin/edit-category', {
-                slug: category.slug,
-                title: category.title,
-                id: category._id
+            Category.find(function(err, categories){
+                if (err) return console.log(err);
+                res.render('admin/edit-product', {
+                    title: "edit product",
+                    product: product,
+                    categories: categories
+                });
             });
         }
     });
