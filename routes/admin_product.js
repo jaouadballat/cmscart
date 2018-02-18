@@ -26,7 +26,6 @@ const fileFilter = function (req, file, cb) {
     }
 
     cb("Error: File upload only supports the following filetypes - " + filetypes);
-
     
 }
 
@@ -98,6 +97,64 @@ router.post('/add-product', function (req, res) {
     
 });
 
+router.post('/update-product/:id', function (req, res) {
+
+    upload(req, res, function (err) {
+
+        let errors = [];
+        if (err) {
+            errors.push({
+                msg: err
+            });
+            Product.findById(req.params.id, function(err, product) {
+                Category.find(function (err, categories) {
+                    res.render('admin/edit-product', {
+                        title: "edit product",
+                        errors: errors,
+                        product: product,
+                        categories: categories
+                    });
+                });
+            });
+            
+
+        } else {
+            req.checkBody('title', 'Title is required').notEmpty();
+            req.checkBody('price', 'Price is required').notEmpty();
+            req.checkBody('description', 'Content is required').notEmpty();
+            errors = req.validationErrors();
+            if (errors) {
+                Product.findById(req.params.id, function (err, product) {
+                    Category.find(function (err, categories) {
+                        res.render('admin/edit-product', {
+                            title: "edit product",
+                            errors: errors,
+                            product: product,
+                            categories: categories
+                        });
+                    });
+                });
+            } else {
+                Product.findById(req.params.id, function(err, product) {
+                    product.title = req.body.title;
+                    product.category = req.body.category;
+                    product.price = req.body.price;
+                    product.description = req.body.description;
+                    if (req.file) {
+                        product.image = '/images/' + req.file.filename;
+                    } 
+                    product.save(function (err) {
+                        if (err) return console.log(err);
+                        res.redirect('/admin/products');
+                    });
+                });
+            }
+        }
+    });
+
+
+});
+
 router.get('/add-product', function (req, res) {
     Category.find(function(err, categories) {
         if(err) return console.log(err);
@@ -128,51 +185,11 @@ router.get('/edit-product/:id', function (req, res) {
 
 });
 
-router.post('/update-category', function (req, res) {
-    req.checkBody('title', 'Title is required').notEmpty();
-    const errors = req.validationErrors();
-    if (errors) {
-        res.render('admin/add-category', {
-            errors: errors,
-            title: "add category"
-        });
-    } else {
-        const title = req.body.title;
-        const slug = slugify(req.body.title);
-        const id = req.body.id;
-        Category.findOne({ slug: slug, _id: { $ne: id } }, function (err, category) {
-            if (err) return console.log(err);
-            if (category) {
-                const errors = [];
-                errors.push({
-                    msg: "This slug is already taken please choose one"
-                });
-                res.render('admin/edit-category', {
-                    id: id,
-                    title: title,
-                    slug: slug,
-                    errors: errors
-                });
-            } else {
-                Category.findByIdAndUpdate(id, {
-                    $set: {
-                        title: title,
-                        slug: slug
-                    }
-                }, function (err) {
-                    if (err) return console.log(err);
-                    res.redirect('/admin/categories');
-                });
-            }
-        });
-    }
-});
 
-router.post('/delete-category', function (req, res) {
-    const id = req.body.id;
-    Category.findByIdAndRemove(id, function (err) {
+router.post('/delete-product/:id', function (req, res) {
+    Product.findByIdAndRemove(req.params.id, function (err) {
         if (err) return console.log(err);
-        res.redirect('/admin/categories');
+        res.redirect('/admin/products');
     });
 });
 
