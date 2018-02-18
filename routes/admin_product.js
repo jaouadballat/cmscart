@@ -37,28 +37,16 @@ const upload = multer({ storage: storage, fileFilter: fileFilter }).single('imag
 /* GET categories listing. */
 router.get('/', function (req, res, next) {
     
-    Category.find({}, function (err, categories) {
+    Product.find({}, function (err, products) {
         if (err) return console.log(err);
-        res.render('admin/categories', {
-            title: "categories",
-            categories: categories
+        res.render('admin/products', {
+            title: "products",
+            products: products
         });
     });
 });
 
 router.post('/add-product', function (req, res) {
-    // req.checkBody('title', 'Title is required').notEmpty();
-    // req.checkBody('price', 'Price is required').notEmpty();
-    // req.checkBody('description', 'Content is required').notEmpty();
-    // let errors = req.validationErrors();
-    // if(errors) {
-    //     Category.find(function (err, categories) {
-    //         res.render('admin/add-product', {
-    //             title: "add product",
-    //             errors: errors,
-    //             categories: categories
-    //         });
-    //     });
     
         upload(req, res, function (err) {
            
@@ -89,17 +77,20 @@ router.post('/add-product', function (req, res) {
                         });
                     });
                 }else {
-                    let product = new Product({
-                        title: req.body.title,
-                        category: req.body.category,
-                        price: req.body.price,
-                        description: req.body.description,
-                        image: req.file.path
-                    });
-                    product.save(function(err) {
+                    let product = new Product();
+                    product.title = req.body.title;
+                    product.category = req.body.category;
+                    product.price = req.body.price;
+                    product.description = req.body.description;
+                    if(req.file) {
+                        product.image = '/images/' + req.file.filename;
+                    }else {
+                        product.image = '/images/no-product-image.png';
+                    }
+                    product.save(function (err) {
                         if (err) return console.log(err);
                         res.redirect('/admin/products/add-product');
-                    });
+                    });                    
                 }
             }
         });

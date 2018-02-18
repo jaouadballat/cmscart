@@ -1,0 +1,36 @@
+<%- include('../_layouts/admin_header'); %>
+<h1>All categories</h1>
+<a class="btn btn-primary my-2" href="/admin/products/add-product">Add a new product</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Edit</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% products.map((product) => { %>
+            <tr>
+                <td><%= product.title %></td>
+                <td><%= product.price %></a></td>
+                <td>
+                    <% if(product.image === '') { %> 
+                        <img src="/public/images/no-product-image.png" width="100" height="100"/>
+                    <% }else{ %>
+                        <img src="<%= product.image %>" width="100" height="100"/>
+                    <% } %>
+                </td>
+                <td><a href="/admin/products/edit-product/<%= product._id %>">Edit</a></td>
+                <td>
+                    <form method="post" action="/admin/products/delete-product" >
+                        <button class="btn btn-danger btn-sm"  type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+<%- include('../_layouts/admin_footer'); %>
