@@ -56,10 +56,12 @@ app.use(expressValidator());
 app.locals.errors = null;
 app.locals.success = null;
 
+
 app.use('/', index);
 app.use('/admin/pages', admin_page);
 app.use('/admin/categories', admin_category);
 app.use('/admin/products', admin_product);
+
 
 
 // catch 404 and forward to error handler

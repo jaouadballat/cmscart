@@ -185,7 +185,6 @@ router.get('/edit-product/:id', function (req, res) {
 
 });
 
-
 router.post('/delete-product/:id', function (req, res) {
     Product.findByIdAndRemove(req.params.id, function (err) {
         if (err) return console.log(err);

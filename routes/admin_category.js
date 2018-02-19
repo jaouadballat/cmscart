@@ -55,6 +55,10 @@ router.post('/add-category', function (req, res) {
                 });
             }
         });
+        Category.find(function (err, categories) {
+            if (err) console.log(err);
+            req.app.locals.categories = categories;
+        });
     }
 });
 
@@ -111,6 +115,10 @@ router.post('/update-category', function (req, res) {
                 });
             }
         });
+        Category.find(function (err, categories) {
+            if (err) console.log(err);
+            req.app.locals.categories = categories;
+        });
     }
 });
 
@@ -119,6 +127,10 @@ router.post('/delete-category', function (req, res) {
     Category.findByIdAndRemove(id, function (err) {
         if (err) return console.log(err);
         res.redirect('/admin/categories');
+    });
+    Category.find(function (err, categories) {
+        if (err) console.log(err);
+        req.app.locals.categories = categories;
     });
 });
 

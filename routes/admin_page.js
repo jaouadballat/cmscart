@@ -49,7 +49,7 @@ router.post('/add-page', function(req, res) {
             slug: slug, 
             content: content
           });
-          page.save(function (err) {
+          page.save(function (err, page) {
             if (err) {
               console.log(err)
             } else {
