@@ -7,7 +7,8 @@
                     <%= product.title %>
                 </h3>
                 <p>$<%= product.price %></p>
-                <a href="/products/<%= product.category %>/<%= product._id %>">See Details</a>
+                <a href="/products/<%= product.category %>/<%= product._id %>">See Details</a><br>
+                <a href="/cart/add/<%= product._id %>">Add To Cart</a>
             </div>
         <% }); %>
     </div>

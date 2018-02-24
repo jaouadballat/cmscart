@@ -27,6 +27,7 @@ const admin_page = require('./routes/admin_page');
 const admin_category = require('./routes/admin_category');
 const admin_product = require('./routes/admin_product');
 const products = require('./routes/products');
+const cart = require('./routes/cart');
 
 const app = express();
 
@@ -48,7 +49,6 @@ app.use(session({
   secret: 'keyboard cat',
   resave: true,
   saveUninitialized: true,
-  cookie: { secure: true }
 }));
 app.use(flash());
 
@@ -57,8 +57,17 @@ app.use(expressValidator());
 app.locals.errors = null;
 app.locals.success = null;
 
+app.all('*', function(req, res, next) {
+  if(req.session.cart === undefined) {
+    app.locals.cart = 0;
+  }else {
+    app.locals.cart = req.session.cart.length;
+  }
+  next();
+});
 
 app.use('/products', products);
+app.use('/cart', cart);
 app.use('/admin/pages', admin_page);
 app.use('/admin/categories', admin_category);
 app.use('/admin/products', admin_product);
