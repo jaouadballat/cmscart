@@ -9,7 +9,6 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
 
-
 //Set connection to mongoose
 const mongoDB = 'mongodb://127.0.0.1/cmscart';
 mongoose.connect(mongoDB);
@@ -66,13 +65,13 @@ app.all('*', function(req, res, next) {
   next();
 });
 
+
 app.use('/products', products);
 app.use('/cart', cart);
 app.use('/admin/pages', admin_page);
 app.use('/admin/categories', admin_category);
 app.use('/admin/products', admin_product);
 app.use('/', index);
-
 
 
 // catch 404 and forward to error handler

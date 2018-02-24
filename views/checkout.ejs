@@ -1,0 +1,42 @@
+<%- include('./_layouts/header'); %>
+<h1>Checkout</h1>
+        <% if(products){%>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Image</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% products.map((product) => { %>
+                    <tr>
+                        <td><%= product.title %></td>
+                        <td>$<%= product.price %></a></td>
+                        <td>
+                            <% if(product.image === '') { %> 
+                                <img src="/public/images/no-product-image.png" width="100" height="100"/>
+                            <% }else{ %>
+                                <img src="<%= product.image %>" width="100" height="100"/>
+                            <% } %>
+                        </td>
+                        <td><%= product.qty %></td>
+                        <td>$<%= product.price * product.qty %></td>
+                        <td>
+                            <a href="/cart/update/<%= product.id %>?action=min" class="btn btn-sm btn-info">-</a>
+                            <a href="/cart/update/<%= product.id %>?action=clear" class="btn btn-sm btn-danger">Clear</a>
+                            <a href="/cart/update/<%= product.id %>?action=add" class="btn btn-sm btn-info">+</a>
+                        </td>
+                        
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+     <%}else{%>
+        <h3 class="text-center">You cart is empty</h3>
+        <%}%>
+<%- include('./_layouts/footer'); %>
