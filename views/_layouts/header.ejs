@@ -40,7 +40,7 @@
       <ul class="list-group">
         <% categories.map(function(category) { %>
           <li class="list-group-item">
-            <a href="#"><%= category.title %></a>
+            <a href="/products/<%= category._id %>"><%= category.title %></a>
           </li>
         <% }); %>
       </ul>

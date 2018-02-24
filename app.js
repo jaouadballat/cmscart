@@ -26,6 +26,7 @@ const index = require('./routes/index');
 const admin_page = require('./routes/admin_page');
 const admin_category = require('./routes/admin_category');
 const admin_product = require('./routes/admin_product');
+const products = require('./routes/products');
 
 const app = express();
 
@@ -57,10 +58,11 @@ app.locals.errors = null;
 app.locals.success = null;
 
 
-app.use('/', index);
+app.use('/products', products);
 app.use('/admin/pages', admin_page);
 app.use('/admin/categories', admin_category);
 app.use('/admin/products', admin_product);
+app.use('/', index);
 
 
 

@@ -10,3 +10,6 @@ function openfile(file) {
     };
     reader.readAsDataURL(input.files[0]);
 }
+
+
+

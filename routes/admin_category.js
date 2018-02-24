@@ -128,6 +128,7 @@ router.post('/delete-category', function (req, res) {
         if (err) return console.log(err);
         res.redirect('/admin/categories');
     });
+    
     Category.find(function (err, categories) {
         if (err) console.log(err);
         req.app.locals.categories = categories;
