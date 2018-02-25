@@ -1,5 +1,7 @@
 const express = require('express');
 const Product = require('../models/products');
+const stripe = require("stripe")("sk_test_bSlBjwlbWBzNzmRUXsbhFaVY");
+
 // const Category = require('../models/categories');
 
 const router = express.Router();
@@ -71,6 +73,28 @@ router.get('/update/:product', function(req,res,next) {
             break;
     }
     res.redirect('back');
+});
+
+router.get('/cancel', function(req, res, next) {
+    res.redirect('/products');
+});
+
+router.post('/checkout', function(req, res, next) {
+    const total = req.query.total;
+    const token = req.body.stripeToken; // Using Express
+    // Charge the user's card:
+    stripe.charges.create({
+        amount: total*100,
+        currency: "usd",
+        description: "Example charge",
+        source: token,
+    }, function (err, charge) {
+        req.session.destroy();
+        res.render('thankyou', {
+            title: 'checkout',
+            email: req.body.stripeEmail
+        });
+    });
 });
 
 

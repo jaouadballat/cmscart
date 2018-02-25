@@ -21,6 +21,7 @@
     "req-flash": "0.0.3",
     "serve-favicon": "~2.4.5",
     "slugify": "^1.2.9",
+    "stripe": "^5.5.0",
     "sweetalert": "^2.1.0"
   },
   "devDependencies": {

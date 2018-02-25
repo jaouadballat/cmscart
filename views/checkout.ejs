@@ -1,5 +1,6 @@
 <%- include('./_layouts/header'); %>
 <h1>Checkout</h1>
+    <% let total = 0; %>
         <% if(products){%>
             <table class="table table-striped">
                 <thead>
@@ -8,7 +9,7 @@
                         <th>Price</th>
                         <th>Image</th>
                         <th>Quantity</th>
-                        <th>Total</th>
+                        <th>Subtotal</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -31,12 +32,40 @@
                             <a href="/cart/update/<%= product.id %>?action=clear" class="btn btn-sm btn-danger">Clear</a>
                             <a href="/cart/update/<%= product.id %>?action=add" class="btn btn-sm btn-info">+</a>
                         </td>
-                        
                     </tr>
+                         <% total += product.price * product.qty %>
                 <% }); %>
                 </tbody>
             </table>
+        <h3 id="total">Total: $<%= total %></h3>
      <%}else{%>
         <h3 class="text-center">You cart is empty</h3>
         <%}%>
+        <div class="text-right">
+            <a href="#" class="btn btn-sm btn-primary" id="checkout">Checkout</a>
+            <a href="/cart/cancel" class="btn btn-sm btn-danger">Cancel</a>
+        </div>
+         <form action="/cart/checkout?total=<%= total %>" method="POST">
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_lJdbCvJNKqmvme8ThPD54LKS"
+                data-amount="<%= total*100 %>"
+                data-name="SellingPc"
+                data-description="Web Site for Electronics Ecommerce"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto">
+            </script>
+        </form>
 <%- include('./_layouts/footer'); %>
+<script>
+   $(function() {
+        $('.stripe-button-el').hide();
+    $('#checkout').click(function(e) {
+        e.preventDefault();
+        $('.stripe-button-el').click();
+    });
+
+
+
+   });
+</script>
