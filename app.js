@@ -27,6 +27,7 @@ const admin_category = require('./routes/admin_category');
 const admin_product = require('./routes/admin_product');
 const products = require('./routes/products');
 const cart = require('./routes/cart');
+const user = require('./routes/user');
 
 const app = express();
 
@@ -66,11 +67,12 @@ app.all('*', function(req, res, next) {
 });
 
 
-app.use('/products', products);
-app.use('/cart', cart);
 app.use('/admin/pages', admin_page);
+app.use('/products', products);
 app.use('/admin/categories', admin_category);
 app.use('/admin/products', admin_product);
+app.use('/cart', cart);
+app.use('/user', user);
 app.use('/', index);
 
 

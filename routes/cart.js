@@ -81,12 +81,12 @@ router.get('/cancel', function(req, res, next) {
 
 router.post('/checkout', function(req, res, next) {
     const total = req.query.total;
-    const token = req.body.stripeToken; // Using Express
+    const token = req.body.stripeToken; 
     // Charge the user's card:
     stripe.charges.create({
         amount: total*100,
         currency: "usd",
-        description: "Example charge",
+        description: "Ecommerce Web Site",
         source: token,
     }, function (err, charge) {
         req.session.destroy();

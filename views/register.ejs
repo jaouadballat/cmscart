@@ -1,0 +1,25 @@
+<%- include('./_layouts/header'); %>
+   <div class="container">
+       <div class="col-md-8">
+           <form action="/user/register" method="post">
+               <div class="form-group">
+                   <label for="">Username:</label>
+                   <input type="text" class="form-control" name="username" placeholder="Username">
+               </div>
+                <div class="form-group">
+                    <label for="">Email:</label>
+                    <input type="email" class="form-control" name="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="">Password:</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="">Confirm Password:</label>
+                    <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password">
+                </div>
+                <button class="btn btn-outline-primary" type="submit">Register</button>
+           </form>
+       </div>        
+   </div>
+<%- include('./_layouts/footer'); %>
