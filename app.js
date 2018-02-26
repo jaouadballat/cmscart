@@ -66,6 +66,22 @@ app.all('*', function(req, res, next) {
   next();
 });
 
+const Page = require('./models/pages');
+const Category = require('./models/categories');
+
+app.get('*', function (req, req, next) {
+  Category.find(function (err, categories) {
+    if (err) console.log(err);
+    app.locals.categories = categories;
+  });
+  Page.find(function (err, pages) {
+    if (err) return console.log(err);
+    app.locals.pages = pages;
+  });
+
+    next();
+});
+
 
 app.use('/admin/pages', admin_page);
 app.use('/products', products);

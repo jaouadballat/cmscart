@@ -17,16 +17,20 @@ router.post('/register', function (req, res) {
     req.checkBody('confirm_password', 'password not match').equals(req.body.password);
     const errors = req.validationErrors();
     if(errors){
-        console.log(errors)
         res.render('register', {
             title: 'register',
             errors: errors
         });
     }else {
+        let errors = [];
         User.findOne({email: req.body.email}, function(err, user){
             if(user) {
                 errors.push({
-                    msg: "The Email Already Exist plear Try again"
+                    msg: "This Email Already Exist plear Try again"
+                });
+                res.render('register', {
+                    title: 'register',
+                    errors: errors
                 });
             }else {
                 let username = req.body.username;
