@@ -1,0 +1,17 @@
+<%- include('./_layouts/header'); %>
+   <div class="container">
+       <div class="col-md-8">
+           <form action="/user/login" method="post">
+                <div class="form-group">
+                    <label for="">Email:</label>
+                    <input type="email" class="form-control" name="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="">Password:</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+                <button class="btn btn-outline-primary" type="submit">Sign In</button>
+           </form>
+       </div>        
+   </div>
+<%- include('./_layouts/footer'); %>

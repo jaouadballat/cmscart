@@ -2,11 +2,18 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 /* GET home page. */
 router.get('/register', function (req, res, next) {
     res.render('register', {
         title: 'register'
+    });
+});
+
+router.get('/login', function (req, res, next) {
+    res.render('login', {
+        title: 'login'
     });
 });
 
@@ -53,6 +60,19 @@ router.post('/register', function (req, res) {
         });
     }
 });
+
+router.post('/login',
+    passport.authenticate('local', {
+        successRedirect: '/admin/pages',
+        failureRedirect: '/user/login',
+        failureFlash: true
+    })
+);
+
+router.get('/logout', function(req, res, next) {
+    req.logout();
+    res.redirect('/user/login');
+})
 
 
 module.exports = router;

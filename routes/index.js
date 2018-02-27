@@ -6,15 +6,9 @@ const Category = require('../models/categories');
 
 router.get('/', function(req, res, next) {
   
-  // Page.find(function (err, pages) {
-  //   if (err) return console.log(err);
-  //   req.app.locals.pages = pages;
-    res.render('index', {
-      title: 'home',
-      content: "home page"
-    });
-  });
-// });
+ 
+    res.redirect('/products')
+});
 
 router.get('/:slug', function(req, res) {
   Page.findOne({slug: req.params.slug}, function(err, page){

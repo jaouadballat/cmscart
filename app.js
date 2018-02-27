@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
+const passport = require('passport');
+const authenticated = require('./config/auth');
 
 //Set connection to mongoose
 const mongoDB = 'mongodb://127.0.0.1/cmscart';
@@ -44,7 +46,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser('secret'));
 
-
 app.use(session({
   secret: 'keyboard cat',
   resave: true,
@@ -53,6 +54,10 @@ app.use(session({
 app.use(flash());
 
 app.use(expressValidator());
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport');
+
 
 app.locals.errors = null;
 app.locals.success = null;
@@ -69,24 +74,25 @@ app.all('*', function(req, res, next) {
 const Page = require('./models/pages');
 const Category = require('./models/categories');
 
-app.get('*', function (req, req, next) {
-  Category.find(function (err, categories) {
+Page.find(function (err, pages) {
+  if (err) return console.log(err);
+  app.locals.pages = pages;
+});
+
+Category.find(function (err, categories) {
     if (err) console.log(err);
     app.locals.categories = categories;
   });
-  Page.find(function (err, pages) {
-    if (err) return console.log(err);
-    app.locals.pages = pages;
-  });
 
-    next();
+app.all('*', function(req, res, next) {
+  res.locals.user = req.user || null;
+  next();
 });
 
-
-app.use('/admin/pages', admin_page);
+app.use('/admin/pages',authenticated, admin_page);
 app.use('/products', products);
-app.use('/admin/categories', admin_category);
-app.use('/admin/products', admin_product);
+app.use('/admin/categories',authenticated, admin_category);
+app.use('/admin/products',authenticated, admin_product);
 app.use('/cart', cart);
 app.use('/user', user);
 app.use('/', index);
